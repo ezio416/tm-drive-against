@@ -1,5 +1,5 @@
-const string  pluginColor = "\\$FFF";
-const string  pluginIcon  = Icons::Arrows;
+const string  pluginColor = "\\$C0C";
+const string  pluginIcon  = Icons::User;
 Meta::Plugin@ pluginMeta  = Meta::ExecutingPlugin();
 const string  pluginTitle = pluginColor + pluginIcon + "\\$G " + pluginMeta.Name;
 
