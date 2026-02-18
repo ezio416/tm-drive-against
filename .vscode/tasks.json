@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "Openplanet Remote Build",
-            "pluginId": "OpponentSelector",
+            "pluginId": "DriveAgainst",
             "openplanetPort": 30000,
             "problemMatcher": [
                 "$Openplanet Remote Build Problem Matcher: Angelscript Compiler"

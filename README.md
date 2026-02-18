@@ -1,7 +1,7 @@
 ![Signed](https://img.shields.io/badge/Signed-No-FF3333)
 ![Game Turbo](https://img.shields.io/badge/Game-Turbo-blue)
 
-# Opponent Selector
+# Drive Against
 
 A simple automatic opponent selector for solo mode.
 
