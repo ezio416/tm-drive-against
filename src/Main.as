@@ -3,8 +3,6 @@ const string  pluginIcon  = Icons::User;
 Meta::Plugin@ pluginMeta  = Meta::ExecutingPlugin();
 const string  pluginTitle = pluginColor + pluginIcon + "\\$G " + pluginMeta.Name;
 
-bool loading = false;
-
 void Main() {
     auto App = cast<CTrackMania>(GetApp());
 
@@ -34,17 +32,18 @@ void Main() {
             OnEnteredMapAsync();
         }
 
+#if DEPENDENCY_PLAYCHALLENGE
         if (true
             and S_ReloadMapOnFinish
-            and !loading
             and App.Challenge.MapInfo !is null
             and Playground.UIConfigs.Length > 0
             and Playground.UIConfigs[0] !is null
             and Playground.UIConfigs[0].UISequence == CGamePlaygroundUIConfig::EUISequence::EndRound
         ) {
             print("RELOADING MAP");
-            Map(App.Challenge.MapInfo).Play();
+            PlayChallenge::Map(App.Challenge.MapInfo).Play();
         }
+#endif
     }
 }
 
@@ -131,41 +130,5 @@ void OnEnteredMapAsync() {
         Button.OnAction();
         print("selected opponent '" + tostring(S_Opponent) + "'");
         return;
-    }
-}
-
-class Map {
-    string name;
-    string path;
-
-    Map(CGameCtnChallengeInfo@ map) {
-        name = map.Name;
-        path = map.FileName;
-    }
-
-    void Play() {
-        if (loading) {
-            return;
-        }
-        loading = true;
-
-        startnew(CoroutineFunc(PlayAsync));
-    }
-
-    private void PlayAsync() {
-        print("loading map " + name + " from path " + path);
-
-        auto App = cast<CTrackMania>(GetApp());
-        App.BackToMainMenu();
-        while (!App.ManiaTitleFlowScriptAPI.IsReady) {
-            yield();
-        }
-        App.ManiaTitleFlowScriptAPI.PlayMap(path, "TMC_CampaignSolo", "");
-        while (!App.ManiaTitleFlowScriptAPI.IsReady) {
-            yield();
-        }
-
-        sleep(10000);
-        loading = false;
     }
 }

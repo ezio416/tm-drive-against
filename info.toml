@@ -3,3 +3,6 @@ name = "Drive Against"
 author = "Ezio"
 category = "Race"
 version = "0.1.2"
+
+[script]
+optional_dependencies = [ "PlayChallenge" ]

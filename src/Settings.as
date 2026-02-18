@@ -11,5 +11,6 @@ enum Opponent {
 [Setting category="General" name="Opponent"]
 Opponent S_Opponent = Opponent::Alone;
 
-[Setting category="General" name="Reload map on finish" description="Since the game doesn't give you the full menu after finishing, this allows for ghost selection"]
+[Setting category="General" name="Reload map on finish"
+description="Since the game doesn't give you the full menu after finishing, this allows for ghost selection. Requires PlayChallenge dependency."]
 bool S_ReloadMapOnFinish = false;
