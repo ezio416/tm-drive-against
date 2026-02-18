@@ -16,10 +16,10 @@ void Main() {
         auto Playground = cast<CTrackManiaRaceNew>(App.CurrentPlayground);
 
         if (false
-            || !S_Enabled
-            || App.Challenge is null
-            || Playground is null
-            || App.Editor !is null
+            or !S_Enabled
+            or App.Challenge is null
+            or Playground is null
+            or App.Editor !is null
         ) {
             lastUid = uid = "";
             continue;
@@ -27,20 +27,20 @@ void Main() {
 
         uid = App.Challenge.EdChallengeId;
         if (true
-            && uid.Length > 0
-            && uid != lastUid
+            and uid.Length > 0
+            and uid != lastUid
         ) {
             lastUid = uid;
             OnEnteredMapAsync();
         }
 
         if (true
-            && S_ReloadMapOnFinish
-            && !loading
-            && App.Challenge.MapInfo !is null
-            && Playground.UIConfigs.Length > 0
-            && Playground.UIConfigs[0] !is null
-            && Playground.UIConfigs[0].UISequence == CGamePlaygroundUIConfig::EUISequence::EndRound
+            and S_ReloadMapOnFinish
+            and !loading
+            and App.Challenge.MapInfo !is null
+            and Playground.UIConfigs.Length > 0
+            and Playground.UIConfigs[0] !is null
+            and Playground.UIConfigs[0].UISequence == CGamePlaygroundUIConfig::EUISequence::EndRound
         ) {
             print("RELOADING MAP");
             Map(App.Challenge.MapInfo).Play();
@@ -49,8 +49,9 @@ void Main() {
 }
 
 void RenderMenu() {
-    if (UI::MenuItem(pluginTitle, "", S_Enabled))
+    if (UI::MenuItem(pluginTitle, "", S_Enabled)) {
         S_Enabled = !S_Enabled;
+    }
 }
 
 void OnEnteredMapAsync() {
@@ -76,9 +77,9 @@ void OnEnteredMapAsync() {
 
         auto Interface = cast<CTrackManiaRaceInterface>(Playground.Interface);
         if (false
-            || Interface is null
-            || Interface.ManialinkPage is null
-            || Interface.ManialinkPage.Childs.Length < 27
+            or Interface is null
+            or Interface.ManialinkPage is null
+            or Interface.ManialinkPage.Childs.Length < 27
         ) {
             // warn("Interface");
             continue;
@@ -93,8 +94,8 @@ void OnEnteredMapAsync() {
 
         auto OpponentFrame = cast<CControlFrame>(Interface.ManialinkPage.Childs[26]);
         if (false
-            || OpponentFrame is null
-            || OpponentFrame.Childs.Length < 2
+            or OpponentFrame is null
+            or OpponentFrame.Childs.Length < 2
         ) {
             // warn("OpponentFrame");
             continue;
@@ -103,10 +104,10 @@ void OnEnteredMapAsync() {
         uint oppIndex = uint(S_Opponent);
         auto OpponentMenu = cast<CControlFrame>(OpponentFrame.Childs[1]);
         if (false
-            || OpponentMenu is null
-            || OpponentMenu.Childs.Length < oppIndex + 1
-            || !OpponentMenu.IsVisible
-            || !OpponentMenu.IsFocused
+            or OpponentMenu is null
+            or OpponentMenu.Childs.Length < oppIndex + 1
+            or !OpponentMenu.IsVisible
+            or !OpponentMenu.IsFocused
         ) {
             // warn("OpponentMenu");
             continue;
@@ -114,8 +115,8 @@ void OnEnteredMapAsync() {
 
         auto Opponent = cast<CControlFrame>(OpponentMenu.Childs[oppIndex]);
         if (false
-            || Opponent is null
-            || Opponent.Childs.Length < 2
+            or Opponent is null
+            or Opponent.Childs.Length < 2
         ) {
             // warn("Opponent");
             continue;
@@ -143,8 +144,9 @@ class Map {
     }
 
     void Play() {
-        if (loading)
+        if (loading) {
             return;
+        }
         loading = true;
 
         startnew(CoroutineFunc(PlayAsync));
@@ -155,11 +157,13 @@ class Map {
 
         auto App = cast<CTrackMania>(GetApp());
         App.BackToMainMenu();
-        while (!App.ManiaTitleFlowScriptAPI.IsReady)
+        while (!App.ManiaTitleFlowScriptAPI.IsReady) {
             yield();
+        }
         App.ManiaTitleFlowScriptAPI.PlayMap(path, "TMC_CampaignSolo", "");
-        while (!App.ManiaTitleFlowScriptAPI.IsReady)
+        while (!App.ManiaTitleFlowScriptAPI.IsReady) {
             yield();
+        }
 
         sleep(10000);
         loading = false;
