@@ -1,6 +1,3 @@
-// c 2025-04-24
-// m 2025-04-24
-
 const string  pluginColor = "\\$FFF";
 const string  pluginIcon  = Icons::Arrows;
 Meta::Plugin@ pluginMeta  = Meta::ExecutingPlugin();
