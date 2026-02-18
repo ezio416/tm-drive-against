@@ -1,9 +1,9 @@
 ![Signed](https://img.shields.io/badge/Signed-No-FF3333)
 ![Game Turbo](https://img.shields.io/badge/Game-Turbo-blue)
 
-# Turbo Opponent Selector
+# Opponent Selector
 
-A simple automatic opponent selector for Trackmania Turbo.
+A simple automatic opponent selector for solo mode.
 
 <!-- ![Signed](https://img.shields.io/badge/Signed-Yes-00AA00) -->
 <!-- ![Signed](https://img.shields.io/badge/Signed-School_Mode-CC1199) -->
