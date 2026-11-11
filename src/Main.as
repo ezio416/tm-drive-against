@@ -100,6 +100,10 @@ void OnEnteredMapAsync() {
             return;
         }
 
+        if (S_Opponent == Opponent::None) {
+            return;
+        }
+
         auto Playground = cast<CTrackManiaRace>(App.CurrentPlayground);
         if (Playground is null) {
             // warn("Playground");
@@ -136,7 +140,8 @@ void OnEnteredMapAsync() {
         auto OpponentMenu = cast<CControlFrame>(OpponentFrame.Childs[1]);
         if (false
             or OpponentMenu is null
-            or OpponentMenu.Childs.Length < oppIndex + 1
+            or int(oppIndex) < 0
+            or oppIndex >= OpponentMenu.Childs.Length
             or !OpponentMenu.IsVisible
             or !OpponentMenu.IsFocused
         ) {
