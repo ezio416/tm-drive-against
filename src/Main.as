@@ -1,7 +1,7 @@
-const string  pluginColor = "\\$C0C";
-const string  pluginIcon  = Icons::User;
-Meta::Plugin@ pluginMeta  = Meta::ExecutingPlugin();
-const string  pluginTitle = pluginColor + pluginIcon + "\\$G " + pluginMeta.Name;
+const string  PLUGIN_COLOR = "\\$c0c";
+const string  PLUGIN_ICON  = Icons::User;
+Meta::Plugin@ PLUGIN_META  = Meta::ExecutingPlugin();
+const string  PLUGIN_TITLE = PLUGIN_COLOR + PLUGIN_ICON + "\\$g " + PLUGIN_META.Name;
 
 void Main() {
     auto App = cast<CTrackMania>(GetApp());
@@ -11,10 +11,9 @@ void Main() {
     while (true) {
         yield();
 
-        auto Playground = cast<CTrackManiaRaceNew>(App.CurrentPlayground);
+        auto Playground = cast<CTrackManiaRace>(App.CurrentPlayground);
 
         if (false
-            or !S_Enabled
             or App.Challenge is null
             or Playground is null
             or App.Editor !is null
@@ -33,28 +32,61 @@ void Main() {
         }
 
 #if DEPENDENCY_PLAYCHALLENGE
+
         if (true
+            and S_Opponent != Opponent::None
             and S_ReloadMapOnFinish
             and App.Challenge.MapInfo !is null
             and Playground.UIConfigs.Length > 0
             and Playground.UIConfigs[0] !is null
             and Playground.UIConfigs[0].UISequence == CGamePlaygroundUIConfig::EUISequence::EndRound
         ) {
-            print("RELOADING MAP");
+            warn("reloading map");
             PlayChallenge::Map(App.Challenge.MapInfo).Play();
+
+            while (true
+                and App.Challenge !is null
+                and App.Challenge.EdChallengeId.Length > 0
+            ) {
+                yield();
+            }
         }
+
 #endif
     }
 }
 
 void RenderMenu() {
-    if (UI::MenuItem(pluginTitle, "", S_Enabled)) {
-        S_Enabled = !S_Enabled;
+    if (UI::BeginMenu(PLUGIN_TITLE)) {
+        if (UI::RadioButton("None (disabled)", S_Opponent == Opponent::None)) {
+            S_Opponent = Opponent::None;
+        }
+        if (UI::RadioButton("Gold", S_Opponent == Opponent::Gold)) {
+            S_Opponent = Opponent::Gold;
+        }
+        if (UI::RadioButton("Silver", S_Opponent == Opponent::Silver)) {
+            S_Opponent = Opponent::Silver;
+        }
+        if (UI::RadioButton("Bronze", S_Opponent == Opponent::Bronze)) {
+            S_Opponent = Opponent::Bronze;
+        }
+        if (UI::RadioButton("Alone", S_Opponent == Opponent::Alone)) {
+            S_Opponent = Opponent::Alone;
+        }
+
+#if DEPENDENCY_PLAYCHALLENGE
+
+        UI::Separator();
+        S_ReloadMapOnFinish = UI::Checkbox("Reload map on finish", S_ReloadMapOnFinish);
+
+#endif
+
+        UI::EndMenu();
     }
 }
 
 void OnEnteredMapAsync() {
-    print("OnEnteredMap");
+    trace("OnEnteredMapAsync");
 
     auto App = cast<CTrackMania>(GetApp());
 
@@ -64,11 +96,11 @@ void OnEnteredMapAsync() {
         yield();
 
         if (Time::Stamp - start > 10) {
-            warn("OnEnteredMap timed out");
+            warn("OnEnteredMapAsync timed out");
             return;
         }
 
-        auto Playground = cast<CTrackManiaRaceNew>(App.CurrentPlayground);
+        auto Playground = cast<CTrackManiaRace>(App.CurrentPlayground);
         if (Playground is null) {
             // warn("Playground");
             continue;
@@ -100,7 +132,7 @@ void OnEnteredMapAsync() {
             continue;
         }
 
-        uint oppIndex = uint(S_Opponent);
+        const uint oppIndex = uint(S_Opponent);
         auto OpponentMenu = cast<CControlFrame>(OpponentFrame.Childs[1]);
         if (false
             or OpponentMenu is null
@@ -128,7 +160,7 @@ void OnEnteredMapAsync() {
         }
 
         Button.OnAction();
-        print("selected opponent '" + tostring(S_Opponent) + "'");
+        trace("selected opponent '" + tostring(S_Opponent) + "'");
         return;
     }
 }
